@@ -1,6 +1,6 @@
-package com.trilogyed.gamestore.repository;
+package com.company.gamestorecatalog.repository;
 
-import com.trilogyed.gamestore.model.TShirt;
+import com.company.gamestorecatalog.models.TShirt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
