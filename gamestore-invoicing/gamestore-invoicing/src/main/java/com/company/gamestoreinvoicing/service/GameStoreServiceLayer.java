@@ -31,28 +31,28 @@ public class GameStoreServiceLayer {
     InvoiceRepository invoiceRepo;
     TaxRepository taxRepo;
     ProcessingFeeRepository processingFeeRepo;
+    @Autowired
     GameStoreCatalog client;
 
     @Autowired
-
     public GameStoreServiceLayer(InvoiceRepository invoiceRepo, TaxRepository taxRepo, ProcessingFeeRepository processingFeeRepo, GameStoreCatalog client) {
-    this.invoiceRepo = invoiceRepo;
-    this.taxRepo = taxRepo;
-    this.processingFeeRepo = processingFeeRepo;
-    this.client = client;
+        this.invoiceRepo = invoiceRepo;
+        this.taxRepo = taxRepo;
+        this.processingFeeRepo = processingFeeRepo;
+        this.client = client;
     }
 
     public InvoiceViewModel createInvoice(InvoiceViewModel invoiceViewModel) {
 
         //validation...
-        if (invoiceViewModel==null)
+        if (invoiceViewModel == null)
             throw new NullPointerException("Create invoice failed. no invoice data.");
 
-        if(invoiceViewModel.getItemType()==null)
+        if (invoiceViewModel.getItemType() == null)
             throw new IllegalArgumentException("Unrecognized Item type. Valid ones: Console or Game");
 
         //Check Quantity is > 0...
-        if(invoiceViewModel.getQuantity()<=0){
+        if (invoiceViewModel.getQuantity() <= 0) {
             throw new IllegalArgumentException(invoiceViewModel.getQuantity() +
                     ": Unrecognized Quantity. Must be > 0.");
         }
@@ -77,7 +77,7 @@ public class GameStoreServiceLayer {
                 throw new IllegalArgumentException("Requested item is unavailable.");
             }
 
-            if (invoiceViewModel.getQuantity()> tempCon.getQuantity()){
+            if (invoiceViewModel.getQuantity() > tempCon.getQuantity()) {
                 throw new IllegalArgumentException("Requested quantity is unavailable.");
             }
 
@@ -92,7 +92,7 @@ public class GameStoreServiceLayer {
                 throw new IllegalArgumentException("Requested item is unavailable.");
             }
             tempGame = returnVal;
-            if(invoiceViewModel.getQuantity() >  tempGame.getQuantity()){
+            if (invoiceViewModel.getQuantity() > tempGame.getQuantity()) {
                 throw new IllegalArgumentException("Requested quantity is unavailable.");
             }
             invoice.setUnitPrice(tempGame.getPrice());
@@ -107,13 +107,13 @@ public class GameStoreServiceLayer {
                 throw new IllegalArgumentException("Requested item is unavailable.");
             }
 
-            if(invoiceViewModel.getQuantity() >  tempTShirt.getQuantity()){
+            if (invoiceViewModel.getQuantity() > tempTShirt.getQuantity()) {
                 throw new IllegalArgumentException("Requested quantity is unavailable.");
             }
             invoice.setUnitPrice(tempTShirt.getPrice());
 
         } else {
-            throw new IllegalArgumentException(invoiceViewModel.getItemType()+
+            throw new IllegalArgumentException(invoiceViewModel.getItemType() +
                     ": Unrecognized Item type. Valid ones: T-Shirt, Console, or Game");
         }
 
@@ -141,7 +141,7 @@ public class GameStoreServiceLayer {
         if (!tempTaxRate.equals(BigDecimal.ZERO))
             invoice.setTax(tempTaxRate.multiply(invoice.getSubtotal()));
         else
-            throw new IllegalArgumentException( invoice.getState() + ": Invalid State code.");
+            throw new IllegalArgumentException(invoice.getState() + ": Invalid State code.");
 
         BigDecimal processingFee;
         Optional<com.company.gamestoreinvoicing.model.ProcessingFee> returnVal2 = processingFeeRepo.findById(invoiceViewModel.getItemType());
@@ -171,28 +171,31 @@ public class GameStoreServiceLayer {
         return buildInvoiceViewModel(invoice);
     }
 
-    public InvoiceViewModel getInvoice(long id) {
+    public Invoice getInvoice(long id) {
         Optional<com.company.gamestoreinvoicing.model.Invoice> invoice = invoiceRepo.findById(id);
         if (invoice == null)
             return null;
         else
-            return buildInvoiceViewModel(invoice.get());
+            return (invoice.get());
     }
 
-    public List<InvoiceViewModel> getAllInvoices() {
-        List<com.company.gamestoreinvoicing.model.Invoice> invoiceList = invoiceRepo.findAll();
-        List<InvoiceViewModel> ivmList = new ArrayList<>();
-        List<InvoiceViewModel> exceptionList = null;
-
-        if (invoiceList == null) {
-            return exceptionList;
-        } else {
-            invoiceList.stream().forEach(i -> {
-                ivmList.add(buildInvoiceViewModel(i));
-            });
-        }
-        return ivmList;
+    public List<Invoice> getAllInvoices() {
+//        List<com.company.gamestoreinvoicing.model.Invoice> invoiceList = invoiceRepo.findAll();
+//        List<InvoiceViewModel> ivmList = new ArrayList<>();
+//        List<InvoiceViewModel> exceptionList = null;
+//
+//        if (invoiceList == null) {
+//            return exceptionList;
+//        } else {
+//            invoiceList.stream().forEach(i -> {
+//                ivmList.add(buildInvoiceViewModel(i));
+//            });
+//        }
+//        return ivmList;
+        List<Invoice> listInvoice = invoiceRepo.findAll();
+        return listInvoice;
     }
+
 
     public List<InvoiceViewModel> getInvoicesByCustomerName(String name) {
         List<com.company.gamestoreinvoicing.model.Invoice> invoiceList = invoiceRepo.findByName(name);

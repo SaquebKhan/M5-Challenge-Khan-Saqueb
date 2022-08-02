@@ -3,6 +3,7 @@ package com.company.gamestoreinvoicing.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -16,14 +17,34 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invoice_id")
     private long id;
+
+    @NotEmpty(message = "Name is required")
     private String name;
+
+    @NotEmpty(message = "Street is required")
     private String street;
+
+    @NotEmpty(message = "City is required")
     private String city;
+
+    @NotEmpty(message = "State is required")
+    @Size(min = 2, max = 2, message = "2-Letter State Code is invalid.")
     private String state;
+
+    @NotEmpty(message = "Zipcode is required")
     private String zipcode;
+
+    @NotEmpty(message = "Item type is required")
     private String itemType;
+
+    @NotNull(message = "Item Id is required")
     private long itemId;
+
     private BigDecimal unitPrice;
+
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Min Quantity is 1")
+    @Max(value = 50000, message = "Max Quantity is 50,000")
     private long quantity;
     private BigDecimal subtotal;
     private BigDecimal tax;

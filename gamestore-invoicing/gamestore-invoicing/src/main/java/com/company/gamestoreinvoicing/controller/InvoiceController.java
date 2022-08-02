@@ -1,6 +1,7 @@
 package com.company.gamestoreinvoicing.controller;
 
 
+import com.company.gamestoreinvoicing.model.Invoice;
 import com.company.gamestoreinvoicing.service.GameStoreServiceLayer;
 import com.company.gamestoreinvoicing.viewModel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,24 +32,34 @@ public class InvoiceController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public InvoiceViewModel findInvoice(@PathVariable("id") long invoiceId) {
-        InvoiceViewModel invoiceViewModel = service.getInvoice(invoiceId);
-        if (invoiceViewModel == null) {
+    public Invoice findInvoice(@PathVariable("id") long invoiceId) {
+        Invoice invoice = service.getInvoice(invoiceId);
+        if (invoice == null) {
             throw new IllegalArgumentException("Invoice could not be retrieved for id " + invoiceId);
         } else {
-            return invoiceViewModel;
+            return invoice;
+        }
+    }
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Invoice findInvoice(@PathVariable("id") long invoiceId) {
+        Invoice invoice = service.getInvoice(invoiceId);
+        if (invoice == null) {
+            throw new IllegalArgumentException("Invoice could not be retrieved for id " + invoiceId);
+        } else {
+            return invoice;
         }
     }
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<InvoiceViewModel> findAllInvoices() {
-        List<InvoiceViewModel> invoiceViewModelList = service.getAllInvoices();
+    public List<Invoice> findAllInvoices() {
+        List<Invoice> InvoiceList = service.getAllInvoices();
 
-        if (invoiceViewModelList == null || invoiceViewModelList.isEmpty()) {
+        if (InvoiceList == null || InvoiceList.isEmpty()) {
             throw new IllegalArgumentException("No invoices were found.");
         } else {
-            return invoiceViewModelList;
+            return InvoiceList;
         }
     }
 

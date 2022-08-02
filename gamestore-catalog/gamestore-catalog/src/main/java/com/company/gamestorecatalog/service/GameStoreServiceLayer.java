@@ -105,7 +105,7 @@ public class GameStoreServiceLayer {
         List<GameViewModel> exceptionList = null;
 
         if (gameList == null) {
-            return exceptionList;
+            return null;
         } else {
             gameList.stream().forEach(g -> gvmList.add(buildGameViewModel(g)));
         }
