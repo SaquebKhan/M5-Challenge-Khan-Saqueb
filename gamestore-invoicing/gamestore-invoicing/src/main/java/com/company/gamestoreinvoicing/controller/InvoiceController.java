@@ -40,15 +40,10 @@ public class InvoiceController {
             return invoice;
         }
     }
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Invoice findInvoice(@PathVariable("id") long invoiceId) {
-        Invoice invoice = service.getInvoice(invoiceId);
-        if (invoice == null) {
-            throw new IllegalArgumentException("Invoice could not be retrieved for id " + invoiceId);
-        } else {
-            return invoice;
-        }
+    @DeleteMapping ("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteInvoice(@PathVariable("id")long invoiceId) {
+        service.deleteInvoice(invoiceId);
     }
 
     @GetMapping()
