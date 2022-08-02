@@ -19,10 +19,6 @@ public class InvoiceController {
     @Autowired
     GameStoreServiceLayer service;
 
-    // Assumption: All orders are final and data privacy is not top priority. Therefore, the Update & Delete EndPoints
-    // are left out by design due to its potential danger. The getAllInvoices is a questionable one since it could
-    // overwhelm the system and infringes on data privacy; however, it does not damage data as with the Update and Delete
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InvoiceViewModel purchaseItem(@RequestBody @Valid InvoiceViewModel invoiceViewModel) {

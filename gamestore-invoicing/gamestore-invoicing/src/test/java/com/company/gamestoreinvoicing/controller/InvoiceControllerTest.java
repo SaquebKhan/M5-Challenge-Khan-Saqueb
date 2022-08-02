@@ -89,7 +89,7 @@ public class InvoiceControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(outputJson));
     }
-    
+
 
     @Test
     public void shouldFindInvoicesByCustomerName() throws Exception{

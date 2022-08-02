@@ -180,18 +180,6 @@ public class GameStoreServiceLayer {
     }
 
     public List<Invoice> getAllInvoices() {
-//        List<com.company.gamestoreinvoicing.model.Invoice> invoiceList = invoiceRepo.findAll();
-//        List<InvoiceViewModel> ivmList = new ArrayList<>();
-//        List<InvoiceViewModel> exceptionList = null;
-//
-//        if (invoiceList == null) {
-//            return exceptionList;
-//        } else {
-//            invoiceList.stream().forEach(i -> {
-//                ivmList.add(buildInvoiceViewModel(i));
-//            });
-//        }
-//        return ivmList;
         List<Invoice> listInvoice = invoiceRepo.findAll();
         return listInvoice;
     }
@@ -214,8 +202,8 @@ public class GameStoreServiceLayer {
         return null;
     }
 
-    public void deleteInvoice(long id){
+    public void deleteInvoice(long id) {
         invoiceRepo.deleteById(id);
     }
-    
+
 }
