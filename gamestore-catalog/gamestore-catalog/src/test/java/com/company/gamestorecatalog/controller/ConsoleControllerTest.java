@@ -1,8 +1,8 @@
-package com.trilogyed.gamestore.controller;
+package com.company.gamestorecatalog.controller;
 
 import com.company.gamestorecatalog.controllers.ConsoleController;
-import com.trilogyed.gamestore.service.GameStoreServiceLayer;
-import com.trilogyed.gamestore.viewModel.ConsoleViewModel;
+import com.company.gamestorecatalog.service.GameStoreServiceLayer;
+import com.company.gamestorecatalog.viewModel.ConsoleViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class ConsoleControllerTest {
     private MockMvc mockMvc;
 
     // The aim of this unit test is to test the controller and NOT the service layer.
-    // Therefore mock the service layer.
+    // Therefore, mock the service layer.
     @MockBean
     private GameStoreServiceLayer storeServiceLayer;
 

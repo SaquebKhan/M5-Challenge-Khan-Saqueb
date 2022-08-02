@@ -1,7 +1,8 @@
-package com.trilogyed.gamestore.controller;
+package com.company.gamestorecatalog.controller;
 
-import com.trilogyed.gamestore.service.GameStoreServiceLayer;
-import com.trilogyed.gamestore.viewModel.GameViewModel;
+import com.company.gamestorecatalog.controllers.GameController;
+import com.company.gamestorecatalog.service.GameStoreServiceLayer;
+import com.company.gamestorecatalog.viewModel.GameViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

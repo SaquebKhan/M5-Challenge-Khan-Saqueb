@@ -1,6 +1,6 @@
-package com.trilogyed.gamestore.repository;
+package com.company.gamestorecatalog.repository;
 
-import com.trilogyed.gamestore.model.Game;
+import com.company.gamestorecatalog.models.Game;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
