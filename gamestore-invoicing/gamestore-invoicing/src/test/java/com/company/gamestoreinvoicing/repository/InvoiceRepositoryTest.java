@@ -1,6 +1,6 @@
-package com.trilogyed.gamestore.repository;
+package com.company.gamestoreinvoicing.repository;
 
-import com.trilogyed.gamestore.model.*;
+import com.company.gamestoreinvoicing.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,21 +22,12 @@ public class InvoiceRepositoryTest {
     @Autowired
     InvoiceRepository invoiceRepository;
     @Autowired
-    TShirtRepository tShirtRepository;
-    @Autowired
-    GameRepository gameRepository;
-    @Autowired
-    ConsoleRepository consoleRepository;
-    @Autowired
     TaxRepository taxRepository;
     @Autowired
     ProcessingFeeRepository processingFeeRepository;
 
     @Before
     public void setUp() throws Exception {
-        consoleRepository.deleteAll();
-        gameRepository.deleteAll();
-        tShirtRepository.deleteAll();
         invoiceRepository.deleteAll();
         processingFeeRepository.deleteAll();
 
@@ -72,7 +63,6 @@ public class InvoiceRepositoryTest {
         tShirt1.setPrice(new BigDecimal("15.99"));
 
         tShirt1.setQuantity(8);
-        tShirt1 = tShirtRepository.save(tShirt1);
 
         Invoice invoice1 = new Invoice();
         invoice1.setName("Joe Black");
@@ -131,7 +121,6 @@ public class InvoiceRepositoryTest {
         tShirt1.setPrice(new BigDecimal("15.99"));
 
         tShirt1.setQuantity(8);
-        tShirt1 = tShirtRepository.save(tShirt1);
 
         Invoice invoice1 = new Invoice();
         invoice1.setName("Joe Black");

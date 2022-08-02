@@ -1,7 +1,7 @@
-package com.trilogyed.gamestore.controller;
+package com.company.gamestoreinvoicing.controller;
 
-import com.trilogyed.gamestore.service.GameStoreServiceLayer;
-import com.trilogyed.gamestore.viewModel.InvoiceViewModel;
+import com.company.gamestoreinvoicing.service.GameStoreServiceLayer;
+import com.company.gamestoreinvoicing.viewModel.InvoiceViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class InvoiceControllerTest {
     private MockMvc mockMvc;
 
     // The aim of this unit test is to test the controller and NOT the service layer.
-    // Therefore mock the service layer.
+    // Therefore, mock the service layer.
     @MockBean
     private GameStoreServiceLayer storeServiceLayer;
 
@@ -89,123 +89,7 @@ public class InvoiceControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(outputJson));
     }
-
-    @Test
-    public void shouldFindInvoice() throws Exception{
-
-        InvoiceViewModel savedInvoice = new InvoiceViewModel();
-        savedInvoice.setName("Joe Black");
-        savedInvoice.setStreet("123 Main St");
-        savedInvoice.setCity("any City");
-        savedInvoice.setState("NY");
-        savedInvoice.setZipcode("10016");
-        savedInvoice.setItemType("T-Shirt");
-        savedInvoice.setItemId(12);//pretending item exists with this id...
-        savedInvoice.setUnitPrice(new BigDecimal("12.50"));//pretending item exists with this price...
-        savedInvoice.setQuantity(2);
-        savedInvoice.setSubtotal(savedInvoice.getUnitPrice().multiply(new BigDecimal(savedInvoice.getQuantity())));
-        savedInvoice.setTax(savedInvoice.getSubtotal().multiply(new BigDecimal("0.06")));
-        savedInvoice.setProcessingFee(new BigDecimal("10.00"));
-        savedInvoice.setTotal(savedInvoice.getSubtotal().add(savedInvoice.getTax()).add(savedInvoice.getProcessingFee()));
-        savedInvoice.setId(22);
-
-        String outputJson = mapper.writeValueAsString(savedInvoice);
-
-        //Mock call to service layer...
-        when(storeServiceLayer.getInvoice(22)).thenReturn(savedInvoice);
-
-        //Act & Assert
-        this.mockMvc.perform(get("/invoice/{id}", 22))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(outputJson));
-
-        //Mock call to service layer...
-        when(storeServiceLayer.getInvoice(-1)).thenReturn(null);
-
-        //Act & Assert
-        this.mockMvc.perform(get("/invoice/{id}", -1))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-
-    }
-
-    @Test
-    public void shouldFindAllInvoices() throws Exception{
-        //Arrange
-        InvoiceViewModel savedInvoice1 = new InvoiceViewModel();
-        savedInvoice1.setName("Joe Black");
-        savedInvoice1.setStreet("123 Main St");
-        savedInvoice1.setCity("any City");
-        savedInvoice1.setState("NY");
-        savedInvoice1.setZipcode("10016");
-        savedInvoice1.setItemType("T-Shirt");
-        savedInvoice1.setItemId(12);//pretending item exists with this id...
-        savedInvoice1.setUnitPrice(new BigDecimal("12.50"));//pretending item exists with this price...
-        savedInvoice1.setQuantity(2);
-        savedInvoice1.setSubtotal(savedInvoice1.getUnitPrice().multiply(new BigDecimal(savedInvoice1.getQuantity())));
-        savedInvoice1.setTax(savedInvoice1.getSubtotal().multiply(new BigDecimal("0.06")));
-        savedInvoice1.setProcessingFee(new BigDecimal("10.00"));
-        savedInvoice1.setTotal(savedInvoice1.getSubtotal().add(savedInvoice1.getTax()).add(savedInvoice1.getProcessingFee()));
-        savedInvoice1.setId(22);
-
-        InvoiceViewModel savedInvoice2 = new InvoiceViewModel();
-        savedInvoice2.setName("Rob Bank");
-        savedInvoice2.setStreet("888 Main St");
-        savedInvoice2.setCity("any town");
-        savedInvoice2.setState("NJ");
-        savedInvoice2.setZipcode("08234");
-        savedInvoice2.setItemType("Console");
-        savedInvoice2.setItemId(120);//pretending item exists with this id...
-        savedInvoice2.setUnitPrice(new BigDecimal("129.50"));//pretending item exists with this price...
-        savedInvoice2.setQuantity(1);
-        savedInvoice2.setSubtotal(savedInvoice2.getUnitPrice().multiply(new BigDecimal(savedInvoice2.getQuantity())));
-        savedInvoice2.setTax(savedInvoice2.getSubtotal().multiply(new BigDecimal("0.08")));
-        savedInvoice2.setProcessingFee(new BigDecimal("10.00"));
-        savedInvoice2.setTotal(savedInvoice2.getSubtotal().add(savedInvoice2.getTax()).add(savedInvoice2.getProcessingFee()));
-        savedInvoice2.setId(12);
-
-        InvoiceViewModel savedInvoice3 = new InvoiceViewModel();
-        savedInvoice3.setName("Sandy Beach");
-        savedInvoice3.setStreet("123 Broad St");
-        savedInvoice3.setCity("any where");
-        savedInvoice3.setState("CA");
-        savedInvoice3.setZipcode("90016");
-        savedInvoice3.setItemType("Game");
-        savedInvoice3.setItemId(19);//pretending item exists with this id...
-        savedInvoice3.setUnitPrice(new BigDecimal("12.50"));//pretending item exists with this price...
-        savedInvoice3.setQuantity(4);
-        savedInvoice3.setSubtotal(savedInvoice3.getUnitPrice().multiply(new BigDecimal(savedInvoice3.getQuantity())));
-        savedInvoice3.setTax(savedInvoice3.getSubtotal().multiply(new BigDecimal("0.09")));
-        savedInvoice3.setProcessingFee(BigDecimal.ZERO);
-        savedInvoice3.setTotal(savedInvoice3.getSubtotal().add(savedInvoice3.getTax()).add(savedInvoice3.getProcessingFee()));
-        savedInvoice3.setId(73);
-
-        List<InvoiceViewModel> foundAllInvoices = new ArrayList<>();
-        foundAllInvoices.add(savedInvoice1);
-        foundAllInvoices.add(savedInvoice2);
-        foundAllInvoices.add(savedInvoice3);
-
-        String outputJson = mapper.writeValueAsString(foundAllInvoices);
-
-        //Mock call to service layer...
-        when(storeServiceLayer.getAllInvoices()).thenReturn(foundAllInvoices);
-
-        //Act & Assert
-        this.mockMvc.perform(get("/invoice"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(outputJson));
-
-        //Mock call to service layer...
-        when(storeServiceLayer.getAllInvoices()).thenReturn(null);
-
-        //Act & Assert
-        this.mockMvc.perform(get("/invoice"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-
-    }
+    
 
     @Test
     public void shouldFindInvoicesByCustomerName() throws Exception{
