@@ -1,10 +1,10 @@
-package com.company.gamestorecatalog;
+package com.trilogyed.gamestore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GamestoreCatalogApplicationTests {
+class GameStoreApplicationTests {
 
 	@Test
 	void contextLoads() {
