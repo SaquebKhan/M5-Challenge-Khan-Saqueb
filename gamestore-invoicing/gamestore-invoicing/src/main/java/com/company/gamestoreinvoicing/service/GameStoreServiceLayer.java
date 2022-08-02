@@ -1,9 +1,13 @@
 package com.company.gamestoreinvoicing.service;
 
+import com.company.gamestoreinvoicing.model.Console;
+import com.company.gamestoreinvoicing.model.Game;
 import com.company.gamestoreinvoicing.model.Invoice;
+import com.company.gamestoreinvoicing.model.TShirt;
 import com.company.gamestoreinvoicing.repository.InvoiceRepository;
 import com.company.gamestoreinvoicing.repository.ProcessingFeeRepository;
 import com.company.gamestoreinvoicing.repository.TaxRepository;
+import com.company.gamestoreinvoicing.util.feign.GameStoreCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,16 +24,22 @@ public class GameStoreServiceLayer {
 
     private final BigDecimal PROCESSING_FEE = new BigDecimal("15.49");
     private final BigDecimal MAX_INVOICE_TOTAL = new BigDecimal("999.99");
+    private final String GAME_ITEM_TYPE = "Game";
+    private final String CONSOLE_ITEM_TYPE = "Console";
+    private final String TSHIRT_ITEM_TYPE = "T-Shirt";
 
-    com.company.gamestoreinvoicing.repository.InvoiceRepository invoiceRepo;
-    com.company.gamestoreinvoicing.repository.TaxRepository taxRepo;
-    com.company.gamestoreinvoicing.repository.ProcessingFeeRepository processingFeeRepo;
+    InvoiceRepository invoiceRepo;
+    TaxRepository taxRepo;
+    ProcessingFeeRepository processingFeeRepo;
+    GameStoreCatalog client;
 
     @Autowired
-    public GameStoreServiceLayer(InvoiceRepository invoiceRepo, TaxRepository taxRepo, ProcessingFeeRepository processingFeeRepo) {
+
+    public GameStoreServiceLayer(InvoiceRepository invoiceRepo, TaxRepository taxRepo, ProcessingFeeRepository processingFeeRepo, GameStoreCatalog client) {
     this.invoiceRepo = invoiceRepo;
     this.taxRepo = taxRepo;
     this.processingFeeRepo = processingFeeRepo;
+    this.client = client;
     }
 
     public InvoiceViewModel createInvoice(InvoiceViewModel invoiceViewModel) {
@@ -57,7 +67,55 @@ public class GameStoreServiceLayer {
         invoice.setItemType(invoiceViewModel.getItemType());
         invoice.setItemId(invoiceViewModel.getItemId());
 
- 
+        if (invoiceViewModel.getItemType().equals(CONSOLE_ITEM_TYPE)) {
+            Console tempCon = null;
+            Optional<Console> returnVal = Optional.ofNullable(client.getConsoleById(invoiceViewModel.getItemId()));
+
+            if (returnVal.isPresent()) {
+                tempCon = returnVal.get();
+            } else {
+                throw new IllegalArgumentException("Requested item is unavailable.");
+            }
+
+            if (invoiceViewModel.getQuantity()> tempCon.getQuantity()){
+                throw new IllegalArgumentException("Requested quantity is unavailable.");
+            }
+
+            invoice.setUnitPrice(tempCon.getPrice());
+
+        } else if (invoiceViewModel.getItemType().equals(GAME_ITEM_TYPE)) {
+            Game tempGame = null;
+            Game returnVal = client.getGameById(invoiceViewModel.getItemId());
+
+            if (returnVal == null) {
+
+                throw new IllegalArgumentException("Requested item is unavailable.");
+            }
+            tempGame = returnVal;
+            if(invoiceViewModel.getQuantity() >  tempGame.getQuantity()){
+                throw new IllegalArgumentException("Requested quantity is unavailable.");
+            }
+            invoice.setUnitPrice(tempGame.getPrice());
+
+        } else if (invoiceViewModel.getItemType().equals(TSHIRT_ITEM_TYPE)) {
+            TShirt tempTShirt = null;
+            Optional<TShirt> returnVal = Optional.ofNullable(client.getTShirtById(invoiceViewModel.getItemId()));
+
+            if (returnVal.isPresent()) {
+                tempTShirt = returnVal.get();
+            } else {
+                throw new IllegalArgumentException("Requested item is unavailable.");
+            }
+
+            if(invoiceViewModel.getQuantity() >  tempTShirt.getQuantity()){
+                throw new IllegalArgumentException("Requested quantity is unavailable.");
+            }
+            invoice.setUnitPrice(tempTShirt.getPrice());
+
+        } else {
+            throw new IllegalArgumentException(invoiceViewModel.getItemType()+
+                    ": Unrecognized Item type. Valid ones: T-Shirt, Console, or Game");
+        }
 
         invoice.setQuantity(invoiceViewModel.getQuantity());
 
