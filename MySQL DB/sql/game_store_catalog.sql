@@ -1,6 +1,6 @@
-drop database if exists game_store;
-create database game_store;
-use game_store;
+drop database if exists game_store_catalog;
+create database game_store_catalog;
+use game_store_catalog;
 
 create table game (
     game_id int primary key auto_increment,
@@ -30,6 +30,10 @@ create table tshirt (
     price decimal(5,2) not null,
     quantity int not null
 );
+
+drop database if exists game_store_invoicing;
+create database game_store_invoicing;
+use game_store_invoicing;
 
 create table invoice (
     invoice_id int primary key auto_increment,
